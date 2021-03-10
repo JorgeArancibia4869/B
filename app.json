@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "lanza-expo",
+    "name": "B",
     "slug": "lanza-expo",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -23,7 +23,24 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
-      }
+      },
+      "intentFilters": [
+        {
+          "action": "VIEW",
+          "autoVerify": true,
+          "data": [
+            {
+              "scheme": "wptbobpr",
+              "host": "*.ponerhost.org",
+              "pathPrefix": "/p-"
+            }
+          ],
+          "category": [
+            "BROWSABLE",
+            "DEFAULT"
+          ]
+        }
+      ]
     },
     "web": {
       "favicon": "./assets/favicon.png"

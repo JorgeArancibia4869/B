@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "B",
-    "slug": "lanza-expo",
+    "slug": "B",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -31,8 +31,8 @@
           "data": [
             {
               "scheme": "wptbobpr",
-              "host": "*.ponerhost.org",
-              "pathPrefix": "/p-"
+              "host": "com.waypoint.A",
+              "pathPrefix": "/pathprefix"
             }
           ],
           "category": [
@@ -40,7 +40,8 @@
             "DEFAULT"
           ]
         }
-      ]
+      ],
+      "package": "com.waypoint.B"
     },
     "web": {
       "favicon": "./assets/favicon.png"

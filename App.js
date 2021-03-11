@@ -18,8 +18,9 @@ export default function App() {
   }, [])
   
   //Para recuperar la ruta y los parámetros
-  // let dataRecived = Linking.parse(link)
-  // console.log(dataRecived)
+  // let { path, queryParams } = Linking.parse(link)
+  // console.log(path)
+  // console.log(queryParams)
   // alert(dataRecived.queryParams)
 
   return (

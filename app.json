@@ -4,6 +4,7 @@
     "slug": "B",
     "version": "1.0.0",
     "orientation": "portrait",
+    "scheme": "wptbobpr",
     "icon": "./assets/icon.png",
     "splash": {
       "image": "./assets/splash.png",
@@ -24,23 +25,6 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
       },
-      "intentFilters": [
-        {
-          "action": "VIEW",
-          "autoVerify": true,
-          "data": [
-            {
-              "scheme": "wptbobpr",
-              "host": "com.waypoint.A",
-              "pathPrefix": "/pathprefix"
-            }
-          ],
-          "category": [
-            "BROWSABLE",
-            "DEFAULT"
-          ]
-        }
-      ],
       "package": "com.waypoint.B"
     },
     "web": {

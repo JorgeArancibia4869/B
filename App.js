@@ -8,17 +8,24 @@ import * as Linking from 'expo-linking';
 
 export default function App() {
 
+  const [link, setLink] = React.useState('')
+
   React.useEffect( () => {
-    Linking.getInitialURL().then(l => console.log("Todo bien", l)).catch(error => console.log(error))
+    Linking.getInitialURL().then(l => {
+      console.log("Todo bien", l)
+      setLink(l)
+    }).catch(error => console.log(error))
   }, [])
   
   //Para recuperar la ruta y los parámetros
   // let dataRecived = Linking.parse(link)
+  // console.log(dataRecived)
   // alert(dataRecived.queryParams)
 
   return (
     <View style={styles.container}>
       <Text>Mock de Bob</Text>
+      <Text>{link}</Text>
     </View>
   );
 }

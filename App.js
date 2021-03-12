@@ -2,11 +2,6 @@ import * as React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import * as Linking from 'expo-linking';
 
-let urlG = ''
-Linking.getInitialURL().then(l => {
-  console.log("Todo bien", l)
-  urlG = l
-}).catch(error => console.log(error))
 
 const getParamsUrl = (link) => {
   console.log(link)
@@ -24,25 +19,32 @@ export default function App() {
   const [link, setLink] = React.useState('')
   
   React.useEffect( () => {
-    setLink(urlG)
-    console.log("urlG:",urlG)
-
-
-    // const {path, queryParams} = getParamsUrl(urlG)
-    // setPath(path)
-    // setQueryParams(queryParams)
+    Linking.getInitialURL().then(l => {
+      setLink(l)
+      console.log("Todo bien", l)
+      const {path, queryParams} = getParamsUrl(l)
+      setPath(path)
+      setQueryParams(queryParams)
+    }).catch(error => console.log(error))
 
     if (!__DEV__) {
-      const urlFromAlice = Linking.createURL('path2', {}, 'wptbobpr')
+      const urlFromAlicePath2 = Linking.createURL('path2', {}, 'wptbobpr')
+      const urlFromAlice = Linking.createURL('', {}, 'wptbobpr')
       console.log("urlFromAlice",urlFromAlice)
       // Linking.removeAllListeners("url");
       Linking.addEventListener(urlFromAlice, ( {url} ) => {
-        console.log("url",url)
-        urlG = url
-        // const {path, queryParams} = getParamsUrl(url)
-        setLink(urlG)
-        // setPath(path)
-        // setQueryParams(queryParams)
+        console.log("url1",url)
+        const {path, queryParams} = getParamsUrl(url)
+        setLink(url)
+        setPath(path)
+        setQueryParams(queryParams)
+      })
+      Linking.addEventListener(urlFromAlicePath2, ( {url} ) => {
+        console.log("url2",url)
+        const {path, queryParams} = getParamsUrl(url)
+        setLink(url)
+        setPath(path)
+        setQueryParams(queryParams)
       })
     }
   }, [])
@@ -54,8 +56,8 @@ export default function App() {
     <View style={styles.container}>
       <Text>Mock de Bob</Text>
       <Text>Link: {link}</Text>
-      {/* <Text>Path: {path}</Text> */}
-      {/* <Text>QueryParams: {queryParams}</Text> */}
+      <Text>Path: {path}</Text>
+      <Text>QueryParams: {JSON.stringify(queryParams, null, 4)}</Text>
     </View>
   );
 }

@@ -35,6 +35,7 @@ export default function App() {
     if (!__DEV__) {
       const urlFromAlice = Linking.createURL('path2', {}, 'wptbobpr')
       console.log("urlFromAlice",urlFromAlice)
+      // Linking.removeAllListeners("url");
       Linking.addEventListener(urlFromAlice, ( {url} ) => {
         console.log("url",url)
         urlG = url

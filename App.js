@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, Button } from 'react-native';
 import * as Linking from 'expo-linking';
 
 
@@ -13,11 +13,15 @@ const getParamsUrl = (link) => {
 }
 
 export default function App() {
-  const [path, setPath] = React.useState('')
-  const [queryParams, setQueryParams] = React.useState({})
+  const urlFromAlicePath2 = 'wptbobpr://path2'; //Linking.createURL('path2', {}, 'wptbobpr')
+  const urlFromAlice = 'wptbobpr://'; //Linking.createURL('', {}, 'wptbobpr')
+  console.log(`urlsFromAlice: "${urlFromAlice}" y "${urlFromAlicePath2}"`);
 
   const [link, setLink] = React.useState('')
-  
+  const [path, setPath] = React.useState('')
+  const [queryParams, setQueryParams] = React.useState({})
+  const [outputs, setOutputs] = React.useState({})
+
   React.useEffect( () => {
     Linking.getInitialURL().then(l => {
       setLink(l)
@@ -28,36 +32,34 @@ export default function App() {
     }).catch(error => console.log(error))
 
     if (!__DEV__) {
-      const urlFromAlicePath2 = Linking.createURL('path2', {}, 'wptbobpr')
-      const urlFromAlice = Linking.createURL('', {}, 'wptbobpr')
-      console.log("urlFromAlice",urlFromAlice)
       // Linking.removeAllListeners("url");
-      Linking.addEventListener(urlFromAlice, ( {url} ) => {
-        console.log("url1",url)
+      Linking.addEventListener('url', ( {url} ) => {
+        console.log(`url(${idCallback}): ${url}`)
         const {path, queryParams} = getParamsUrl(url)
         setLink(url)
         setPath(path)
         setQueryParams(queryParams)
-      })
-      Linking.addEventListener(urlFromAlicePath2, ( {url} ) => {
-        console.log("url2",url)
-        const {path, queryParams} = getParamsUrl(url)
-        setLink(url)
-        setPath(path)
-        setQueryParams(queryParams)
-      })
+        setOutputs({ urlFromListener: url, ...outputs })
+      });
+
     }
   }, [])
 
 
   // alert(dataRecived.queryParams)
-
+  
   return (
     <View style={styles.container}>
-      <Text>Mock de Bob</Text>
+      <Text>Mock de Bob {__DEV__? '(Modo desarrollo/expoGo)' : '(Modo produccion/standalone)'}</Text>
       <Text>Link: {link}</Text>
       <Text>Path: {path}</Text>
       <Text>QueryParams: {JSON.stringify(queryParams, null, 4)}</Text>
+      <Text>outputs: {JSON.stringify(outputs, null, 4)}</Text>
+      {__DEV__? (
+        <Button title="AutoOpen DeepLink" onPress={() => {
+          Linking.openURL(`${link}/path2?param1=que&param2=tal`).then(() => console.log('auto-linking!!'));
+        }}/>
+      ) : null}
     </View>
   );
 }

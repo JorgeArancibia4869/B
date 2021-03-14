@@ -6,10 +6,20 @@ import * as Linking from 'expo-linking';
 const getParamsUrl = (link) => {
   console.log(link)
     //Para recuperar la ruta y los parámetros
-    const { path, queryParams } = Linking.parse(link)
+    const reDeepLinkURL = /^(\w+)\:\/\/([^\?]*)(\?(.*))?$/;
+    const matches = reDeepLinkURL.exec(link);
+    const { schema, path, queryParamsStr } = { schema: matches[1], path: '/' + matches[2], queryParamsStr: matches[4] };
+    let queryParams = {};
+    if (queryParamsStr.length > 0) {
+      queryParamsStr.split('&').forEach(pairStr => {
+        const pair = pairStr.split('=');
+        queryParams[pair[0]] = pair[1];
+      })
+    }
+    //const { path, queryParams } = Linking.parse(link)
     console.log("path: ",path)
     console.log("queryParams: ", queryParams)
-    return { path, queryParams }
+    return { schema, path, queryParams }
 }
 
 export default function App() {
@@ -34,7 +44,7 @@ export default function App() {
     if (!__DEV__) {
       // Linking.removeAllListeners("url");
       Linking.addEventListener('url', ( {url} ) => {
-        console.log(`url(${idCallback}): ${url}`)
+        console.log(`url: ${url}`)
         const {path, queryParams} = getParamsUrl(url)
         setLink(url)
         setPath(path)

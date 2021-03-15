@@ -1,61 +1,48 @@
 import * as React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
-import * as Linking from 'expo-linking';
+import { View, Text, StyleSheet, Button } from 'react-native';
+import DeepLinkingTrigger from './util/deep-linking-trigger';
 
-let urlG = ''
-Linking.getInitialURL().then(l => {
-  console.log("Todo bien", l)
-  urlG = l
-}).catch(error => console.log(error))
+const urlFromAlicePath2 = 'wptbobpr://path2';
+const urlFromAlice = 'wptbobpr://';
+console.log(`urlsFromAlice: "${urlFromAlice}" y "${urlFromAlicePath2}"`);
 
-const getParamsUrl = (link) => {
-  console.log(link)
-    //Para recuperar la ruta y los parámetros
-    const { path, queryParams } = Linking.parse(link)
-    console.log("path: ",path)
-    console.log("queryParams: ", queryParams)
-    return { path, queryParams }
-}
+const dlTrigger = new DeepLinkingTrigger('wptbobpr');
 
 export default function App() {
+  const [link, setLink] = React.useState('')
   const [path, setPath] = React.useState('')
   const [queryParams, setQueryParams] = React.useState({})
+  const [outputs, setOutputs] = React.useState({})
 
-  const [link, setLink] = React.useState('')
-  
+  const setStates = ({ wasTriggered, scheme, path, queryParams, url }) => {
+    setLink(url)
+    setPath(path)
+    setQueryParams(queryParams)
+    setOutputs({ wasTriggered, urlFromListener: url, ...outputs })
+  };
+  const logError = error => console.log(error);
+
   React.useEffect( () => {
-    setLink(urlG)
-    console.log("urlG:",urlG)
-
-
-    // const {path, queryParams} = getParamsUrl(urlG)
-    // setPath(path)
-    // setQueryParams(queryParams)
+    dlTrigger.getInitialURL().then(setStates).catch(logError);
 
     if (!__DEV__) {
-      const urlFromAlice = Linking.createURL('path2', {}, 'wptbobpr')
-      console.log("urlFromAlice",urlFromAlice)
-      // Linking.removeAllListeners("url");
-      Linking.addEventListener(urlFromAlice, ( {url} ) => {
-        console.log("url",url)
-        urlG = url
-        // const {path, queryParams} = getParamsUrl(url)
-        setLink(urlG)
-        // setPath(path)
-        // setQueryParams(queryParams)
-      })
+      dlTrigger.getEventURL().then(setStates).catch(logError);
     }
   }, [])
 
-
-  // alert(dataRecived.queryParams)
-
+  
   return (
     <View style={styles.container}>
-      <Text>Mock de Bob</Text>
+      <Text>Mock de Bob {__DEV__? '(Modo desarrollo/expoGo)' : '(Modo produccion/standalone)'}</Text>
       <Text>Link: {link}</Text>
-      {/* <Text>Path: {path}</Text> */}
-      {/* <Text>QueryParams: {queryParams}</Text> */}
+      <Text>Path: {path}</Text>
+      <Text>QueryParams: {JSON.stringify(queryParams, null, 4)}</Text>
+      <Text>outputs: {JSON.stringify(outputs, null, 4)}</Text>
+      {__DEV__? (
+        <Button title="AutoOpen DeepLink" onPress={() => {
+          Linking.openURL(`${link}/path2?param1=que&param2=tal`).then(() => console.log('auto-linking!!'));
+        }}/>
+      ) : null}
     </View>
   );
 }

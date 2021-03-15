@@ -1,7 +1,6 @@
 import * as Linking from 'expo-linking';
 
 const getDeepLinkingURLParts = (url) => {
-    console.log(url);
     const reDeepLinkURL = /^(\w+)\:\/\/([^\?]*)(\?(.*))?$/;
     const matches = reDeepLinkURL.exec(url);
     if (matches === null) {
@@ -30,7 +29,6 @@ const getObjectFromQueryString = (queryParamsStr) => {
             queryParams[pair[0]] = pair[1];
         });
     }
-    console.log("parseURL::(scheme, path, queryParams): ", scheme, path, queryParams);
     return queryParams;
 };
 

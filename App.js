@@ -14,7 +14,7 @@ export default function App() {
   const [queryParams, setQueryParams] = React.useState({})
   const [outputs, setOutputs] = React.useState({})
 
-  const setStates = ({ wasTriggered, scheme, path, queryParams, url }) => {
+  const setStates = ({ wasTriggered, path, queryParams, url }) => {
     setLink(url)
     setPath(path)
     setQueryParams(queryParams)
